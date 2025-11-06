@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+@theme {
+    --color-background: 0 0% 100%;
+    --color-foreground: 222.2 47.4% 11.2%;
+
+    --color-muted: 210 40% 96.1%;
+    --color-muted-foreground: 215.4 16.3% 46.9%;
+
+    --color-popover: 0 0% 100%;
+    --color-popover-foreground: 222.2 47.4% 11.2%;
+
+    --color-border: 214.3 31.8% 91.4%;
+    --color-input: 214.3 31.8% 91.4%;
+
+    --color-card: 0 0% 100%;
+    /* 투명 원하면 0 0% 100% 대신 0 0% 0% / 0 사용 */
+    --color-card-foreground: 222.2 47.4% 11.2%;
+
+    --color-primary: 222.2 47.4% 11.2%;
+    --color-primary-foreground: 210 40% 98%;
+
+    --color-secondary: 210 40% 96.1%;
+    --color-secondary-foreground: 222.2 47.4% 11.2%;
+
+    --color-accent: 210 40% 96.1%;
+    --color-accent-foreground: 222.2 47.4% 11.2%;
+
+    --color-destructive: 0 100% 50%;
+    --color-destructive-foreground: 210 40% 98%;
+
+    --color-ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+}
+
+
+@layer base {
+    .dark {
+        --color-background: 224 71% 4%;
+        --color-foreground: 213 31% 91%;
+
+        --color-muted: 223 47% 11%;
+        --color-muted-foreground: 215.4 16.3% 56.9%;
+
+        --color-accent: 216 34% 17%;
+        --color-accent-foreground: 210 40% 98%;
+
+        --color-popover: 224 71% 4%;
+        --color-popover-foreground: 215 20.2% 65.1%;
+
+        --color-border: 216 34% 17%;
+        --color-input: 216 34% 17%;
+
+        --color-card: 224 71% 4%;
+        --color-card-foreground: 213 31% 91%;
+
+        --color-primary: 210 40% 98%;
+        --color-primary-foreground: 222.2 47.4% 1.2%;
+
+        --color-secondary: 222.2 47.4% 11.2%;
+        --color-secondary-foreground: 210 40% 98%;
+
+        --color-destructive: 0 63% 31%;
+        --color-destructive-foreground: 210 40% 98%;
+
+        --color-ring: 216 34% 17%;
+
+        --radius: 0.5rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+}
+
+
+@layer components {
+    .all-\[unset\] {
+        all: unset;
+    }
+}
+
+/* 필요하면 커스텀 변수도 유지 가능 */
+:root {
+    --systemgrey-800: rgba(66, 66, 66, 1);
+    --animate-spin: spin 1s linear infinite;
+}
+
+.animate-fade-in {
+    animation: fade-in 1s var(--animation-delay, 0s) ease forwards;
+}
+
+.animate-fade-up {
+    animation: fade-up 1s var(--animation-delay, 0s) ease forwards;
+}
+
+.animate-marquee {
+    animation: marquee var(--duration) infinite linear;
+}
+
+.animate-marquee-vertical {
+    animation: marquee-vertical var(--duration) linear infinite;
+}
+
+.animate-shimmer {
+    animation: shimmer 8s infinite;
+}
+
+.animate-spin {
+    animation: var(--animate-spin);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+@keyframes image-glow {
+    0% {
+        opacity: 0;
+        animation-timing-function: cubic-bezier(0.74, 0.25, 0.76, 1);
+    }
+
+    10% {
+        opacity: 0.7;
+        animation-timing-function: cubic-bezier(0.12, 0.01, 0.08, 0.99);
+    }
+
+    to {
+        opacity: 0.4;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fade-up {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes shimmer {
+
+    0%,
+    90%,
+    to {
+        background-position: calc(-100% - var(--shimmer-width)) 0;
+    }
+
+    30%,
+    60% {
+        background-position: calc(100% + var(--shimmer-width)) 0;
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translate(0);
+    }
+
+    to {
+        transform: translateX(calc(-100% - var(--gap)));
+    }
+}
+
+@keyframes marquee-vertical {
+    0% {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(calc(-100% - var(--gap)));
+    }
+}
