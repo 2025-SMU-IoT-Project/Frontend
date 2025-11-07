@@ -6,5 +6,5 @@ import "./index.css";
 createRoot(document.getElementById("app")).render(
     <StrictMode>
         <MainSelectUser />
-    </StrictMode>,
+    </StrictMode> 
 );
