@@ -1,14 +1,15 @@
 import React from "react";
 import { Button } from "../../components/ui/button.jsx";
 import Header from "../../components/Header";
+import Map from "../../components/Map";
 
 const userTypes = [{ label: "유저" }, { label: "환경 미화원" }];
 
-const mapPins = [
-    { top: "top-[189px]", left: "left-[342px]" },
-    { top: "top-[287px]", left: "left-[310px]" },
-    { top: "top-[209px]", left: "left-[412px]" },
-];
+// const mapPins = [
+//     { top: "top-[189px]", left: "left-[342px]" },
+//     { top: "top-[287px]", left: "left-[310px]" },
+//     { top: "top-[209px]", left: "left-[412px]" },
+// ];
 
 export const MainSelectUser = () => {
     return (
@@ -20,21 +21,17 @@ export const MainSelectUser = () => {
 
             <main className="flex-1 flex items-center justify-center">
                 <div className="flex items-center gap-[83px]">
-                    <section className="w-[822px] h-[615px] relative translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
+                    <section className="w-[822px] h-[615px] relative translate-y-[-1rem]">
                         <div className="w-full h-full flex">
-                            <img
-                                className="w-full h-full object-cover"
-                                alt="Map API"
-                                src="https://c.animaapp.com/mhmu6djuEhBhwI/img/map-api.png"
-                            />
+                            <Map />
                         </div>
 
-                        {mapPins.map((pin, index) => (
+                        {/* {mapPins.map((pin, index) => (
                             <div
                                 key={index}
                                 className={`absolute w-[41px] h-[41px] bg-[url(https://c.animaapp.com/mhmu6djuEhBhwI/img/ping-3.png)] bg-cover bg-[50%_50%] ${pin.top} ${pin.left}`}
                             />
-                        ))}
+                        ))} */}
                     </section>
 
                     <section className="w-[400px] h-[615px] bg-[#d9d9d9] flex flex-col items-center justify-center gap-[81px] px-[55px] py-[210px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
