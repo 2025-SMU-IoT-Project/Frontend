@@ -21,7 +21,7 @@ export const MainSelectUser = () => {
 
             <main className="flex-1 flex items-center justify-center">
                 <div className="flex items-center gap-[83px]">
-                    <section className="w-[822px] h-[615px] relative translate-y-[-1rem]">
+                    <section className="w-[822px] h-[615px] relative translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
                         <div className="w-full h-full flex">
                             <Map />
                         </div>
