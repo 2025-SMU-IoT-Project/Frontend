@@ -10,7 +10,7 @@ const Map = () => {
 
         kakao.maps.load(() => {
             const options = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                center: new kakao.maps.LatLng(37.6027611, 126.9553047),
                 level: 3,
             };
             new kakao.maps.Map(mapRef.current, options);
