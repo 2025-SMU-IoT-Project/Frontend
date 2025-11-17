@@ -21,7 +21,7 @@ export const MainSelectUser = () => {
                         </div>
                     </section>
 
-                    <section className="w-[400px] h-[615px] bg-[#d9d9d9] flex flex-col items-center justify-center gap-[81px] px-[55px] py-[210px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
+                    <section className="w-[400px] h-[615px] bg-[#fff4b0]/25 flex flex-col items-center justify-center gap-[81px] px-[55px] py-[210px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
                         <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
                             안녕하세요! 당신은
                         </h1>
