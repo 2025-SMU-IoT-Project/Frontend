@@ -1,4 +1,7 @@
 import { useEffect, useRef } from "react";
+import blackMarkerImg from "../../public/markers/marker-black.png";
+import redMarkerImg from "../../public/markers/marker-red.png";
+
 
 const Map = () => {
     const mapRef = useRef(null);
@@ -48,8 +51,8 @@ const Map = () => {
                 hoverOffset = new kakao.maps.Point(14, 40);
 
             // 마커 URL
-            const DEFAULT_MARKER_URL = "markers/marker-black.png";
-            const CLICK_MARKER_URL = "markers/marker-red.png";
+            const DEFAULT_MARKER_URL = blackMarkerImg;
+            const CLICK_MARKER_URL = redMarkerImg;
 
             // 쓰레기통 위치
             var positions = [  // 마커의 위치 
