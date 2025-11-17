@@ -3,7 +3,7 @@ import blackMarkerImg from "../../public/markers/marker-black.png";
 import redMarkerImg from "../../public/markers/marker-red.png";
 
 
-const Map = () => {
+const Map = ({ onMarkerSelect }) => {
     const mapRef = useRef(null);
 
     useEffect(() => {
@@ -55,21 +55,30 @@ const Map = () => {
             const CLICK_MARKER_URL = redMarkerImg;
 
             // 쓰레기통 위치
-            var positions = [  // 마커의 위치 
-                new kakao.maps.LatLng(37.6018240, 126.9547290), // 사슴상 앞
-                new kakao.maps.LatLng(37.6013625, 126.9555766), // 메가커피 앞
-                new kakao.maps.LatLng(37.6027596, 126.95485927) // 미래백년관 계단 앞
+            var bins = [  // 마커의 위치 
+                {
+                    binId: 1,
+                    position: new kakao.maps.LatLng(37.6013857, 126.9555877), // 본관 1층 중앙홀
+                },
+                {
+                    binId: 2,
+                    position: new kakao.maps.LatLng(37.6015699, 126.9544615), // 공학관 1층 로비
+                },
+                {
+                    binId: 3,
+                    position: new kakao.maps.LatLng(37.6020176, 126.9543041) // 학생회관 2층 카페테리아
+                }
             ],
                 selectedMarker = null; // 클릭한 마커를 담을 변수
 
 
             // 쓰레기통 위치마다 마커 추가(표시)
-            for (var i = 0, len = positions.length; i < len; i++) {
-                addMarker(positions[i]);
+            for (var i = 0, len = bins.length; i < len; i++) {
+                addMarker(bins[i].position, bins[i].binId);
             }
 
             // 마커를 생성 및 지도에 표시 & 마커에 mouseover, mouseout, click 이벤트 등록
-            function addMarker(position) {
+            function addMarker(position, binId) {
                 // 기본 마커 이미지
                 const defaultImage = new kakao.maps.MarkerImage(
                     DEFAULT_MARKER_URL,
@@ -100,11 +109,11 @@ const Map = () => {
 
                 // 마커 객체에 마커 기본 이미지 추가
                 marker.normalImage = defaultImage;
+                marker.binId = binId;
 
                 // 마커 이벤트
                 // mouseover 이벤트
                 kakao.maps.event.addListener(marker, 'mouseover', function () {
-
                     // 클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면
                     // 마커의 이미지를 호버 이미지로 변경
                     if (!selectedMarker || selectedMarker !== marker) {
@@ -114,7 +123,6 @@ const Map = () => {
 
                 // mouseout 이벤트
                 kakao.maps.event.addListener(marker, 'mouseout', function () {
-
                     // 클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
                     // 마커의 이미지를 기본 이미지로 변경
                     if (!selectedMarker || selectedMarker !== marker) {
@@ -124,7 +132,7 @@ const Map = () => {
 
                 // click 이벤트
                 kakao.maps.event.addListener(marker, 'click', function () {
-
+                    // 이미지 변경
                     // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
                     // 마커의 이미지를 클릭 이미지로 변경
                     if (!selectedMarker || selectedMarker !== marker) {
@@ -139,6 +147,11 @@ const Map = () => {
 
                     // 클릭된 마커를 현재 클릭된 마커 객체로 설정
                     selectedMarker = marker;
+
+                    // 부모 컴포넌트(MainMap)으로 콜백
+                    if (onMarkerSelect) {
+                        onMarkerSelect(marker.binId);
+                    }
                 });
                 
             }
