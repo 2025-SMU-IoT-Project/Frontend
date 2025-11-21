@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header";
 import Map from "../../components/Map";
 import { Button } from "../../components/ui/button.jsx";
@@ -11,7 +11,10 @@ export const MainMap = () => {
     const [selectedBinId, setSelectedBinId] = useState(null);
     // 쓰레기통 정보 모두 저장
     const [binData, setBinData] = useState(null);
+    // 대시보드 등으로 redirection
     const navigate = useNavigate();
+    // URL에서 role 파라미터 가져오기 (user 또는 worker)
+    const { role } = useParams();
 
     // 서버에 GET 요청(쓰레기통 정보-이름, 무게, 과적율)
     useEffect(() => {
@@ -86,11 +89,14 @@ export const MainMap = () => {
                                     const cupFull = binData.fillRate >= 80 || binData.cupWeight >= 4;
                                     const liquidFull = binData.liquidRate >= 80 || binData.liquidWeight >= 4;
 
+                                    // role에 따라 다른 메시지 표시
+                                    const isWorker = role === 'worker';
+
                                     if (cupFull && liquidFull) {
                                         return (
                                             <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
                                                 쓰레기통(컵통 및 물통)이 거의 다 찼습니다! <br />
-                                                쓰레기통을 비워주세요.
+                                                {isWorker ? '쓰레기통을 비워주세요.' : '다른 쓰레기통을 이용해주세요.'}
                                                 <br />
                                                 <br />
                                                 <br />
@@ -100,7 +106,7 @@ export const MainMap = () => {
                                         return (
                                             <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
                                                 컵통이 거의 다 찼습니다! <br />
-                                                컵통을 비워주세요.
+                                                {isWorker ? '컵통을 비워주세요.' : '다른 컵통을 이용해주세요.'}
                                                 <br />
                                                 <br />
                                                 <br />
@@ -110,7 +116,7 @@ export const MainMap = () => {
                                         return (
                                             <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
                                                 물통이 거의 다 찼습니다! <br />
-                                                물통을 비워주세요.
+                                                {isWorker ? '물통을 비워주세요.' : '다른 물통을 이용해주세요.'}
                                                 <br />
                                                 <br />
                                                 <br />
