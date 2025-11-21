@@ -20,7 +20,7 @@ export const MainMap = () => {
         // 새 마커 선택 위해 클릭마다 초기화
         setBinData(null);
 
-        axios.get(`http://localhost:8080/api/bin/${selectedBinId}`)
+        axios.get(`http://localhost:8080/api/bin/detail/${selectedBinId}`)
             .then((response) => {
                 // 성공 핸들링
                 console.log(response.data);
@@ -49,8 +49,8 @@ export const MainMap = () => {
                         </div>
                     </section>
 
-                    <section className="w-[400px] h-[615px] bg-[#fff4b0]/25 flex flex-col items-center justify-center gap-[81px] px-[55px] py-[210px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
-                        
+                    <section className="w-[400px] h-[615px] bg-[#fff4b0]/25 flex flex-col items-center justify-center px-[55px] py-8 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
+
                         {!selectedBinId && (
                             /* 마커 미선택 시*/
                             <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
@@ -67,25 +67,27 @@ export const MainMap = () => {
 
                         {selectedBinId && binData && (
                             /* 마커 선택 시*/
-                            <div id="marker-selected">
+                            <div id="marker-selected" className="flex flex-col items-center justify-center">
                                 <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-md text-center tracking-[0.20px] leading-[normal]">
                                     쓰레기통 정보 요약<br /><br />
                                 </h1>
 
-                                    {/* 사슴상 옆 쓰레기통 1 */}
                                 <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-md text-center tracking-[0.20px] leading-[normal]">
-                                    이름: {binData.binName} <br /><br />
+                                    쓰레기통 이름: {binData.binName} <br /><br />
+
+                                    쓰레기통 채워짐 정도: {binData.fillRate}%, {binData.cupWeight}kg <br />
+                                    물통 채워짐 정도: {binData.liquidRate}%, {binData.liquidWeight}kg <br /><br />
                                 </h1>
 
-                                    {/* 쓰레기통 채워짐 정도: 80%, 4kg
+                                {/* 쓰레기통 채워짐 정도: 80%, 4kg
                                     물통 채워짐 정도: 60%, 3kg */}
 
                                 <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
-                                         쓰레기통이 거의 다 찼습니다! <br />
-                                         쓰레기통을 수거해주세요.
-                                        <br />
-                                        <br />
-                                        <br />
+                                    쓰레기통이 거의 다 찼습니다! <br />
+                                    쓰레기통을 수거해주세요.
+                                    <br />
+                                    <br />
+                                    <br />
                                 </h1>
 
                                 <Button
@@ -93,7 +95,7 @@ export const MainMap = () => {
                                     className="w-[200px] h-[50px] bg-[linear-gradient(0deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.45)_100%),linear-gradient(0deg,rgba(217,217,217,1)_0%,rgba(217,217,217,1)_100%)] hover:bg-[linear-gradient(0deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.6)_100%),linear-gradient(0deg,rgba(217,217,217,1)_0%,rgba(217,217,217,1)_100%)] [font-family:'Inter',Helvetica] font-bold text-white text-sm text-center tracking-[0.20px] leading-[normal] transition-colors"
                                 >
                                     대시보드로 더 자세히 확인
-                                </Button> 
+                                </Button>
                             </div>
                         )}
                     </section>
