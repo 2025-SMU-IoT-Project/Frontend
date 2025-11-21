@@ -75,20 +75,51 @@ export const MainMap = () => {
                                 <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-md text-center tracking-[0.20px] leading-[normal]">
                                     쓰레기통 이름: {binData.binName} <br /><br />
 
-                                    쓰레기통 채워짐 정도: {binData.fillRate}%, {binData.cupWeight}kg <br />
+                                    컵통 채워짐 정도: {binData.fillRate}%, {binData.cupWeight}kg <br />
                                     물통 채워짐 정도: {binData.liquidRate}%, {binData.liquidWeight}kg <br /><br />
                                 </h1>
 
-                                {/* 쓰레기통 채워짐 정도: 80%, 4kg
-                                    물통 채워짐 정도: 60%, 3kg */}
+                                {/* 컵통 채워짐 정도: 80%, 4kg
+                                    물통 채워짐 정도: 80%, 4kg */}
 
-                                <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
-                                    쓰레기통이 거의 다 찼습니다! <br />
-                                    쓰레기통을 수거해주세요.
-                                    <br />
-                                    <br />
-                                    <br />
-                                </h1>
+                                {(() => {
+                                    const cupFull = binData.fillRate >= 80 || binData.cupWeight >= 4;
+                                    const liquidFull = binData.liquidRate >= 80 || binData.liquidWeight >= 4;
+
+                                    if (cupFull && liquidFull) {
+                                        return (
+                                            <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
+                                                쓰레기통(컵통 및 물통)이 거의 다 찼습니다! <br />
+                                                쓰레기통을 비워주세요.
+                                                <br />
+                                                <br />
+                                                <br />
+                                            </h1>
+                                        );
+                                    } else if (cupFull) {
+                                        return (
+                                            <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
+                                                컵통이 거의 다 찼습니다! <br />
+                                                컵통을 비워주세요.
+                                                <br />
+                                                <br />
+                                                <br />
+                                            </h1>
+                                        );
+                                    } else if (liquidFull) {
+                                        return (
+                                            <h1 className="[font-family:'Inter',Helvetica] font-bold text-black text-sm text-center tracking-[0.20px] leading-[normal]">
+                                                물통이 거의 다 찼습니다! <br />
+                                                물통을 비워주세요.
+                                                <br />
+                                                <br />
+                                                <br />
+                                            </h1>
+                                        );
+                                    } else {
+                                        return null;
+                                    }
+                                })()}
 
                                 <Button
                                     // onClick={() => navigate(`/dashboard`)}
