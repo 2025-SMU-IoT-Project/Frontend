@@ -1,6 +1,7 @@
 const navigationLinks = [
     { label: "Map", active: true },
     { label: "Dashboard", active: false },
+    { label: "Event", active: false },
 ];
 
 const Header = () => {
