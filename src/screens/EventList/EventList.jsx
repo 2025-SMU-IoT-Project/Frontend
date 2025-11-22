@@ -27,10 +27,10 @@ const EventList = () => {
             }
 
             if (data.isSuccess) {
-                const newEvents = data.result.values;
+                const newEvents = data.result || [];
                 setEvents(prev => isLoadMore ? [...prev, ...newEvents] : newEvents);
-                setNextCursor(data.result.nextCursor);
-                setHasNext(data.result.hasNext);
+                setNextCursor(data.result?.nextCursor);
+                setHasNext(data.result?.hasNext);
             }
         } catch (error) {
             console.error("Failed to fetch events", error);
