@@ -4,6 +4,7 @@ import { Button } from "../../components/ui/button.jsx";
 import Header from "../../components/Header";
 import Map from "../../components/Map";
 import { TotalStatistics } from "./sections/TotalStatistics/TotalStatistics";
+import { SelectedInfo } from "./sections/SelectedInfo/SelectedInfo";
 import axios from "axios";
 
 export const Dashboard = () => {
@@ -39,16 +40,16 @@ export const Dashboard = () => {
         >
             <Header />
 
-            <main className="flex-1 px-[80px] py-[40px]">
+            <main className="flex-1 py-[40px] px-[80px] max-w-[1400px] mx-auto w-full">
                 {/* 전체 쓰레기통 통계 - 상단 */}
                 <div className="mb-[60px]">
                     <TotalStatistics />
                 </div>
 
                 {/* 하단 영역: 왼쪽 지도 + 오른쪽 선택한 쓰레기통 정보 */}
-                <div className="flex gap-[40px]">
+                <div className="flex gap-[20px] items-start">
                     {/* 왼쪽: 선택한 쓰레기통의 대시보드 */}
-                    <section className="flex-1">
+                    <section className="w-[700px]">
                         <h2 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-[25px] tracking-[0] leading-[normal] mb-[20px]">
                             선택한 쓰레기통의 대시보드
                             <br />
@@ -73,9 +74,14 @@ export const Dashboard = () => {
                         </div>
 
                         {/* 지도 */}
-                        <div className="w-[800px] h-[600px] relative">
+                        <div className="w-[700px] h-[600px] relative">
                             <Map onMarkerSelect={setSelectedBinId} />
                         </div>
+                    </section>
+
+                    {/* 오른쪽: 현재 선택한 쓰레기통의 정보 */}
+                    <section className="w-[400px]">
+                        <SelectedInfo binData={binData} />
                     </section>
                 </div>
             </main>

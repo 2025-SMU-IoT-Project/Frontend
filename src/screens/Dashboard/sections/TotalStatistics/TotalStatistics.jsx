@@ -60,8 +60,9 @@ export const TotalStatistics = () => {
             });
     }, [selectedPeriod, selectedDate]);
 
-    const selectedDateDaily = selectedDate.slice(0, 10);
-    const selectedDateMonthly = selectedDate.slice(0, 7);
+    // 드롭다운에 표시할 날짜 - 선택과 무관하게 항상 올바른 형식
+    const displayDateDaily = getTodayDate();
+    const displayDateMonthly = getCurrentMonth();
 
     // totalData가 null이면 로딩 중 표시
     if (!totalData) {
@@ -114,7 +115,7 @@ export const TotalStatistics = () => {
 
     return (
         <section className="w-full">
-            <header className="flex items-center justify-between mb-[27px]">
+            <header className="flex items-center gap-[20px] mb-[27px]">
                 <h2 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-[25px] tracking-[0] leading-[normal]">
                     전체 쓰레기통 통계
                 </h2>
@@ -130,10 +131,10 @@ export const TotalStatistics = () => {
                     </SelectTrigger>
                     <SelectContent className="w-[365px] rounded-[20px] border-[1px] border-[#34C759]/30 bg-white p-4">
                         <SelectItem value="daily" className="h-[50px] text-sm px-4 mb-2 rounded-[15px] data-[state=checked]:bg-[#C8E6C9] hover:bg-[#34C759] transition-colors">
-                            하루 ({selectedDateDaily})
+                            하루 ({displayDateDaily})
                         </SelectItem>
                         <SelectItem value="monthly" className="h-[50px] text-sm px-4 rounded-[15px] data-[state=checked]:bg-[#C8E6C9] hover:bg-[#34C759] transition-colors">
-                            한 달 ({selectedDateMonthly})
+                            한 달 ({displayDateMonthly})
                         </SelectItem>
                     </SelectContent>
                 </Select>
