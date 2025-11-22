@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent } from "../../../../components/ui/cardHorizontal";
+import { CardHorizontal, CardHorizontalContent } from "../../../../components/ui/cardHorizontal";
 import recycleBinImg from "../../../../../public/dashboardImgs/recycle-bin.png";
 import warningImg from "../../../../../public/dashboardImgs/warning.png";
 import {
@@ -10,40 +10,6 @@ import {
     SelectValue,
 } from "../../../../components/ui/select";
 import axios from "axios";
-
-const statsCards = [
-    {
-        label: "투입량",
-        value: totalData.totalCups, // 백 서버에서 데이터 가져오기
-        bgColor: "bg-[#34c7597a]",
-        iconSrc: "https://c.animaapp.com/mi7s9pt1n6xKon/img/cup.png",
-        iconAlt: "Cup",
-    },
-    {
-        label: "액체 포함",
-        value: totalData.liquidRate,
-        bgColor: "bg-[#0062ff70]",
-        iconSrc: "https://c.animaapp.com/mi7s9pt1n6xKon/img/liquid.png",
-        iconAlt: "Liquid",
-    },
-    {
-        label: "비정상 투입",
-        value: totalData.abnormalCount,
-        bgColor: "bg-[#FFCDC0]",
-        iconSrc: warningImg,
-        iconAlt: "unaccepted",
-    },
-    {
-        label: "쓰레기통 채워짐",
-        value: totalData.averageFillRate,
-        bgColor: "bg-[#FFF4B0]",
-        iconSrc: recycleBinImg,
-        iconAlt: "fillRate",
-    },
-];
-
-// 쓰레기통 정보 모두 저장
-const [totalData, setTotalData] = useState(null);
 
 // 현재 날짜를 'YYYY-MM-DD' 형식으로 반환
 const getTodayDate = () => {
@@ -67,6 +33,8 @@ export const TotalStatistics = () => {
     const [selectedPeriod, setSelectedPeriod] = useState("daily");
     // 오늘/해당 월 선택 상태 (기본 오늘)
     const [selectedDate, setSelectedDate] = useState(getTodayDate());
+    // 쓰레기통 정보 모두 저장
+    const [totalData, setTotalData] = useState(null);
 
     // 기간이 변경될 때 자동으로 날짜 설정
     useEffect(() => {
@@ -82,10 +50,6 @@ export const TotalStatistics = () => {
         const params = new URLSearchParams();
         params.append("period", selectedPeriod);
 
-        if (selectedDate) {
-            params.append("date", selectedDate);
-        }
-
         axios.get(`http://localhost:8080/api/bin/stats?${params.toString()}`)
             .then((response) => {
                 console.log(response.data);
@@ -95,6 +59,37 @@ export const TotalStatistics = () => {
                 console.log(error);
             });
     }, [selectedPeriod, selectedDate]);
+
+    const statsCards = [
+        {
+            label: "투입량",
+            value: totalData.totalCups, // 백 서버에서 데이터 가져오기
+            bgColor: "bg-[#34c7597a]",
+            iconSrc: "https://c.animaapp.com/mi7s9pt1n6xKon/img/cup.png",
+            iconAlt: "Cup",
+        },
+        {
+            label: "액체 포함",
+            value: totalData.liquidRate,
+            bgColor: "bg-[#0062ff70]",
+            iconSrc: "https://c.animaapp.com/mi7s9pt1n6xKon/img/liquid.png",
+            iconAlt: "Liquid",
+        },
+        {
+            label: "비정상 투입",
+            value: totalData.abnormalCount,
+            bgColor: "bg-[#FFCDC0]",
+            iconSrc: warningImg,
+            iconAlt: "unaccepted",
+        },
+        {
+            label: "쓰레기통 채워짐",
+            value: totalData.averageFillRate,
+            bgColor: "bg-[#FFF4B0]",
+            iconSrc: recycleBinImg,
+            iconAlt: "fillRate",
+        },
+    ];
 
     return (
         <section className="w-full">
@@ -126,7 +121,7 @@ export const TotalStatistics = () => {
                         className="w-[255px] h-[120px] bg-[#fff4af40] rounded-[25px] border-0 shadow-none translate-y-[-1rem] animate-fade-in opacity-0"
                         style={{ "--animation-delay": `${index * 200}ms` }}
                     >
-                        <CardContent className="p-0 h-full flex items-center justify-center">
+                        <CardHorizontalContent className="p-0 h-full flex items-center justify-center">
                             <div className="flex gap-[15px] items-center px-9">
                                 <div
                                     className={`relative w-[70px] h-[70px] ${stat.bgColor} rounded-[35px] flex items-center justify-center`}
@@ -148,7 +143,7 @@ export const TotalStatistics = () => {
                                     </div>
                                 </div>
                             </div>
-                        </CardContent>
+                        </CardHorizontalContent>
                     </CardHorizontal>
                 ))}
             </div>
