@@ -60,6 +60,24 @@ export const TotalStatistics = () => {
             });
     }, [selectedPeriod, selectedDate]);
 
+    // totalData가 null이면 로딩 중 표시
+    if (!totalData) {
+        return (
+            <section className="w-full">
+                <header className="flex items-center justify-between mb-[27px]">
+                    <h2 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-[25px] tracking-[0] leading-[normal]">
+                        전체 쓰레기통 통계
+                    </h2>
+                </header>
+                <div className="flex gap-[30px] items-start">
+                    <p className="[font-family:'Inter',Helvetica] text-black text-base">
+                        통계 데이터를 불러오는 중...
+                    </p>
+                </div>
+            </section>
+        );
+    }
+
     const statsCards = [
         {
             label: "투입량",

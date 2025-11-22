@@ -1,19 +1,27 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "../../components/ui/button.jsx";
 import Header from "../../components/Header";
 import Map from "../../components/Map";
 import { TotalStatistics } from "./sections/TotalStatistics/TotalStatistics";
+import axios from "axios";
 
 export const Dashboard = () => {
-    // 선택된 마커 상태 저장
-    const [selectedBinId, setSelectedBinId] = useState(null);
+    const location = useLocation();
+
+    // MainMap에서 전달받은 binId를 초기값으로 설정
+    const [selectedBinId, setSelectedBinId] = useState(location.state?.binId || null);
     // 선택된 쓰레기통의 정보 저장
     const [binData, setBinData] = useState(null);
     // 대시보드 등으로 redirection
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!selectedBinId) return;
+
+        // 새 마커 선택 위해 클릭마다 초기화
+        setBinData(null);
+
         axios.get(`http://localhost:8080/api/bin/detail/${selectedBinId}`)
             .then((response) => {
                 console.log(response.data);
@@ -22,7 +30,7 @@ export const Dashboard = () => {
             .catch((error) => {
                 console.log(error);
             });
-    }, [selectedBinId])
+    }, [selectedBinId]);
 
     return (
         <div
@@ -44,9 +52,21 @@ export const Dashboard = () => {
 
                         <div className="flex gap-[52px]">
                             <div className="relative w-[750px]">
-                                <h3 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-lg tracking-[0] leading-[normal] mb-[17px]">
-                                    {binData.binName} 통계
-                                </h3>
+                                {selectedBinId && binData ? (
+                                    <h3 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-lg tracking-[0] leading-[normal] mb-[17px]">
+                                        {binData.binName} 통계
+                                    </h3>
+                                ) : // 만약 binData null일 시
+                                    selectedBinId && !binData ? (
+                                        <p className="[font-family:'Inter',Helvetica] text-black text-sm">
+                                            쓰레기통 정보를 불러오는 중...
+                                        </p>
+                                    ) : // 만약 쓰레기통 마커를 지도에서 선택하지 않았을 시
+                                        (
+                                            <p className="[font-family:'Inter',Helvetica] text-black text-sm">
+                                                지도에서 쓰레기통을 선택해주세요.
+                                            </p>
+                                        )}
                             </div>
                         </div>
                     </section>

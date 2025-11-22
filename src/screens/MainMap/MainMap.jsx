@@ -128,7 +128,7 @@ export const MainMap = () => {
                                 })()}
 
                                 <Button
-                                    onClick={() => navigate(`/dashboard`)}
+                                    onClick={() => navigate('/dashboard', { state: { binId: selectedBinId } })}
                                     className="w-[200px] h-[50px] bg-[linear-gradient(0deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.45)_100%),linear-gradient(0deg,rgba(217,217,217,1)_0%,rgba(217,217,217,1)_100%)] hover:bg-[linear-gradient(0deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.6)_100%),linear-gradient(0deg,rgba(217,217,217,1)_0%,rgba(217,217,217,1)_100%)] [font-family:'Inter',Helvetica] font-bold text-white text-sm text-center tracking-[0.20px] leading-[normal] transition-colors"
                                 >
                                     대시보드로 더 자세히 확인
