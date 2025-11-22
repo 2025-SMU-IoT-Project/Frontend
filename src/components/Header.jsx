@@ -1,10 +1,22 @@
+import { useNavigate, useLocation } from "react-router-dom";
+
 const navigationLinks = [
-    { label: "Map", active: true },
-    { label: "Dashboard", active: false },
-    { label: "Event", active: false },
+    { label: "Map", path: "/" },
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "Event", path: "/events" },
 ];
 
 const Header = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const isActive = (path) => {
+        if (path === "/") {
+            return location.pathname === "/" || location.pathname.startsWith("/map");
+        }
+        return location.pathname.startsWith(path);
+    };
+
     return (
         <header className="flex items-center justify-between px-[114px] pt-[21px] pb-4">
             <div className="inline-flex items-end gap-2.5 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:0ms]">
@@ -20,7 +32,8 @@ const Header = () => {
                 {navigationLinks.map((link, index) => (
                     <button
                         key={index}
-                        className={`w-20 h-[18px] flex items-center justify-center [font-family:'Inter',Helvetica] text-sm text-center tracking-[0.20px] leading-[normal] transition-colors ${link.active
+                        onClick={() => navigate(link.path)}
+                        className={`w-20 h-[18px] flex items-center justify-center [font-family:'Inter',Helvetica] text-sm text-center tracking-[0.20px] leading-[normal] transition-colors cursor-pointer ${isActive(link.path)
                             ? "font-bold text-[#34c759]"
                             : "font-medium text-systemgrey-800 hover:text-[#34c759]"
                             }`}
