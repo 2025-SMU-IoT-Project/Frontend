@@ -60,6 +60,9 @@ export const TotalStatistics = () => {
             });
     }, [selectedPeriod, selectedDate]);
 
+    const selectedDateDaily = selectedDate.slice(0, 10);
+    const selectedDateMonthly = selectedDate.slice(0, 7);
+
     // totalData가 null이면 로딩 중 표시
     if (!totalData) {
         return (
@@ -125,9 +128,13 @@ export const TotalStatistics = () => {
                             </span>
                         </SelectValue>
                     </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="daily">오늘 {selectedDate}</SelectItem>
-                        <SelectItem value="monthly">한 달 {selectedDate}</SelectItem>
+                    <SelectContent className="w-[365px] rounded-[20px] border-[1px] border-[#34C759]/30 bg-white p-4">
+                        <SelectItem value="daily" className="h-[50px] text-sm px-4 mb-2 rounded-[15px] data-[state=checked]:bg-[#C8E6C9] hover:bg-[#34C759] transition-colors">
+                            하루 ({selectedDateDaily})
+                        </SelectItem>
+                        <SelectItem value="monthly" className="h-[50px] text-sm px-4 rounded-[15px] data-[state=checked]:bg-[#C8E6C9] hover:bg-[#34C759] transition-colors">
+                            한 달 ({selectedDateMonthly})
+                        </SelectItem>
                     </SelectContent>
                 </Select>
             </header>
