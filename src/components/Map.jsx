@@ -47,7 +47,7 @@ const Map = ({ onMarkerSelect }) => {
                 markerOffset = new kakao.maps.Point(OFFSET_X, OFFSET_Y);
 
             // 호버용 검정 마커 사이즈 설정
-            var hoverSize = new kakao.maps.Size(40, 40), 
+            var hoverSize = new kakao.maps.Size(40, 40),
                 hoverOffset = new kakao.maps.Point(14, 40);
 
             // 마커 URL
@@ -153,12 +153,12 @@ const Map = ({ onMarkerSelect }) => {
                         onMarkerSelect(marker.binId);
                     }
                 });
-                
+
             }
         }
     }, []);
 
-    return <div ref={mapRef} style={{ width: "822px", height: "615px" }} />;
+    return <div ref={mapRef} style={{ width: "100%", height: "100%" }} />;
 };
 
 export default Map;
