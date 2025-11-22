@@ -126,8 +126,8 @@ export const TotalStatistics = () => {
                         </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="daily">기간: 오늘 {selectedDate}</SelectItem>
-                        <SelectItem value="monthly">기간: 한 달 {selectedDate}</SelectItem>
+                        <SelectItem value="daily">오늘 {selectedDate}</SelectItem>
+                        <SelectItem value="monthly">한 달 {selectedDate}</SelectItem>
                     </SelectContent>
                 </Select>
             </header>

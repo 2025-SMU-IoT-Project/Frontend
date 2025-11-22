@@ -39,41 +39,41 @@ export const Dashboard = () => {
         >
             <Header />
 
-            <main className="flex-1 flex items-center justify-center">
-                <div className="flex items-center gap-[83px]">
-                    {/* 전체 쓰레기통 통계 */}
+            <main className="flex-1 px-[80px] py-[40px]">
+                {/* 전체 쓰레기통 통계 - 상단 */}
+                <div className="mb-[60px]">
                     <TotalStatistics />
+                </div>
 
-                    {/* 선택한 쓰레기통의 대시보드 */}
-                    <section className="relative w-full px-36 mt-8">
-                        <h2 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-[25px] tracking-[0] leading-[normal] mb-[53px]">
+                {/* 하단 영역: 왼쪽 지도 + 오른쪽 선택한 쓰레기통 정보 */}
+                <div className="flex gap-[40px]">
+                    {/* 왼쪽: 선택한 쓰레기통의 대시보드 */}
+                    <section className="flex-1">
+                        <h2 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-[25px] tracking-[0] leading-[normal] mb-[20px]">
                             선택한 쓰레기통의 대시보드
+                            <br />
                         </h2>
 
-                        <div className="flex gap-[52px]">
-                            <div className="relative w-[750px]">
-                                {selectedBinId && binData ? (
-                                    <h3 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-lg tracking-[0] leading-[normal] mb-[17px]">
-                                        {binData.binName} 통계
-                                    </h3>
-                                ) : // 만약 binData null일 시
-                                    selectedBinId && !binData ? (
+                        <div className="mb-[20px]">
+                            {selectedBinId && binData ? (
+                                <h3 className="[font-family:'Inter',Helvetica] font-semibold text-[#333b69] text-lg tracking-[0] leading-[normal] mb-[17px]">
+                                    {binData.binName} 통계
+                                </h3>
+                            ) : // 만약 binData null일 시
+                                selectedBinId && !binData ? (
+                                    <p className="[font-family:'Inter',Helvetica] text-black text-sm">
+                                        쓰레기통 정보를 불러오는 중...
+                                    </p>
+                                ) : // 만약 쓰레기통 마커를 지도에서 선택하지 않았을 시
+                                    (
                                         <p className="[font-family:'Inter',Helvetica] text-black text-sm">
-                                            쓰레기통 정보를 불러오는 중...
+                                            지도에서 쓰레기통을 선택해주세요.
                                         </p>
-                                    ) : // 만약 쓰레기통 마커를 지도에서 선택하지 않았을 시
-                                        (
-                                            <p className="[font-family:'Inter',Helvetica] text-black text-sm">
-                                                지도에서 쓰레기통을 선택해주세요.
-                                            </p>
-                                        )}
-                            </div>
+                                    )}
                         </div>
-                    </section>
 
-                    {/* 지도 */}
-                    <section className="w-[600px] h-[500px] relative translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
-                        <div className="w-full h-full flex">
+                        {/* 지도 */}
+                        <div className="w-[800px] h-[600px] relative">
                             <Map onMarkerSelect={setSelectedBinId} />
                         </div>
                     </section>
