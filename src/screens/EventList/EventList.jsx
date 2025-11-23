@@ -7,7 +7,6 @@ import StatusBadge from '../../components/StatusBadge';
 const EventList = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [selectedBinId, setSelectedBinId] = useState(null);
     const [nextCursor, setNextCursor] = useState(null);
     const [hasNext, setHasNext] = useState(true);
 
@@ -15,6 +14,9 @@ const EventList = () => {
     const onlyAbnormal = searchParams.get('abnormal') === 'true';
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
+    const binIdParam = searchParams.get('binId');
+    const selectedBinId = binIdParam ? Number(binIdParam) : null;
+
 
     const navigate = useNavigate();
 
@@ -109,6 +111,18 @@ const EventList = () => {
         return lastEventDate >= start;
     };
 
+    const handleBinChange = (e) => {
+        const value = e.target.value;
+        setSearchParams(params => {
+            if (value) {
+                params.set('binId', value);
+            } else {
+                params.delete('binId');
+            }
+            return params;
+        });
+    };
+
     return (
         <div className="bg-slate-50 min-h-screen flex flex-col font-['Inter']">
             <Header />
@@ -146,7 +160,7 @@ const EventList = () => {
                                 <label className="text-sm text-slate-500 font-medium">쓰레기통:</label>
                                 <select
                                     value={selectedBinId || ''}
-                                    onChange={(e) => setSelectedBinId(e.target.value ? Number(e.target.value) : null)}
+                                    onChange={handleBinChange}
                                     className="bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                                 >
                                     <option value="">전체</option>

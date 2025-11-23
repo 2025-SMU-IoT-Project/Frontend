@@ -44,7 +44,7 @@ const EventDetail = () => {
             <Header />
             <main className="flex-1 p-8 max-w-5xl mx-auto w-full">
                 <button
-                    onClick={() => navigate('/events')}
+                    onClick={() => navigate(-1)}
                     className="mb-8 text-slate-400 hover:text-slate-900 flex items-center gap-2 font-medium transition-colors"
                 >
                     ← Back to List
