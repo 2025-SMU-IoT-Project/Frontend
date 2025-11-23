@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getAllEvents, getEventsByBin } from '../../api/eventApi';
 import Header from '../../components/Header';
 import StatusBadge from '../../components/StatusBadge';
@@ -10,6 +10,12 @@ const EventList = () => {
     const [selectedBinId, setSelectedBinId] = useState(null);
     const [nextCursor, setNextCursor] = useState(null);
     const [hasNext, setHasNext] = useState(true);
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const onlyAbnormal = searchParams.get('abnormal') === 'true';
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+
     const navigate = useNavigate();
 
     const fetchEvents = useCallback(async (isLoadMore = false) => {
@@ -21,30 +27,30 @@ const EventList = () => {
             let data;
 
             if (selectedBinId) {
-                data = await getEventsByBin(selectedBinId, cursorToUse);
+                data = await getEventsByBin(selectedBinId, cursorToUse, 20, onlyAbnormal, startDate, endDate);
             } else {
-                data = await getAllEvents(cursorToUse);
+                data = await getAllEvents(cursorToUse, 20, onlyAbnormal, startDate, endDate);
             }
 
             if (data.isSuccess) {
-                const newEvents = data.result || [];
+                const newEvents = data.result.content || data.result.values || [];
                 setEvents(prev => isLoadMore ? [...prev, ...newEvents] : newEvents);
-                setNextCursor(data.result?.nextCursor);
-                setHasNext(data.result?.hasNext);
+                setNextCursor(data.result.nextCursor);
+                setHasNext(data.result.hasNext);
             }
         } catch (error) {
             console.error("Failed to fetch events", error);
         } finally {
             setLoading(false);
         }
-    }, [selectedBinId, nextCursor, loading]);
+    }, [selectedBinId, nextCursor, loading, onlyAbnormal, startDate, endDate]);
 
     useEffect(() => {
         setEvents([]);
         setNextCursor(null);
         setHasNext(true);
         fetchEvents(false);
-    }, [selectedBinId]);
+    }, [selectedBinId, onlyAbnormal, startDate, endDate]);
 
     const handleLoadMore = () => {
         if (hasNext && !loading) {
@@ -52,34 +58,108 @@ const EventList = () => {
         }
     };
 
+    const toggleAbnormal = (checked) => {
+        setSearchParams(params => {
+            if (checked) {
+                params.set('abnormal', 'true');
+            } else {
+                params.delete('abnormal');
+            }
+            return params;
+        });
+    };
+
+    const clearDateFilter = () => {
+        setSearchParams(params => {
+            params.delete('startDate');
+            params.delete('endDate');
+            return params;
+        });
+    };
+
+    const filteredEvents = events.filter(event => {
+        if (!startDate && !endDate) return true;
+
+        const eventDate = new Date(event.timestamp);
+
+        if (startDate) {
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+            if (eventDate < start) return false;
+        }
+
+        if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            if (eventDate > end) return false;
+        }
+
+        return true;
+    });
+
+    const shouldShowLoadMore = () => {
+        if (!hasNext) return false;
+        if (!startDate) return true;
+        if (events.length === 0) return true;
+
+        const lastEventDate = new Date(events[events.length - 1].timestamp);
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+
+        return lastEventDate >= start;
+    };
+
     return (
         <div className="bg-slate-50 min-h-screen flex flex-col font-['Inter']">
             <Header />
             <main className="flex-1 p-8 w-full">
                 <div className="max-w-3xl mx-auto">
-                    <div className="flex justify-between items-end mb-8">
+                    <div className="flex flex-col md:flex-row justify-between items-end md:items-center mb-8 gap-4">
                         <div>
                             <h1 className="text-3xl font-bold text-slate-900 tracking-tight">컵 투입 목록</h1>
-                            <p className="text-slate-500 mt-2">쓰레기통에 투입된 컵을 모니터링합니다.</p>
+                            <div className="flex items-center gap-2 mt-2">
+                                <p className="text-slate-500">
+                                    {onlyAbnormal ? '비정상 투입 컵을 모니터링합니다.' : '쓰레기통에 투입된 컵을 모니터링합니다.'}
+                                </p>
+                                {startDate && endDate && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
+                                        {startDate} ~ {endDate}
+                                        <button onClick={clearDateFilter} className="hover:text-blue-900">×</button>
+                                    </span>
+                                )}
+                            </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm text-slate-500 font-medium">쓰레기통:</label>
-                            <select
-                                value={selectedBinId || ''}
-                                onChange={(e) => setSelectedBinId(e.target.value ? Number(e.target.value) : null)}
-                                className="bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                            >
-                                <option value="">전체</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
+                        <div className="flex flex-col md:flex-row items-end md:items-center gap-4">
+                            <label className="inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="sr-only peer"
+                                    checked={onlyAbnormal}
+                                    onChange={(e) => toggleAbnormal(e.target.checked)}
+                                />
+                                <div className="relative w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                                <span className="ms-3 text-sm font-medium text-slate-700">Only Abnormal</span>
+                            </label>
+
+                            <div className="flex items-center gap-2">
+                                <label className="text-sm text-slate-500 font-medium">쓰레기통:</label>
+                                <select
+                                    value={selectedBinId || ''}
+                                    onChange={(e) => setSelectedBinId(e.target.value ? Number(e.target.value) : null)}
+                                    className="bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                                >
+                                    <option value="">전체</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <div className="space-y-6">
-                        {events.map((event) => (
+                        {filteredEvents.map((event) => (
                             <div
                                 key={event.uuid}
                                 onClick={() => navigate(`/events/${event.uuid}`)}
@@ -150,7 +230,7 @@ const EventList = () => {
                         {loading && (
                             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900 mb-4"></div>
                         )}
-                        {!loading && hasNext && (
+                        {!loading && shouldShowLoadMore() && (
                             <button
                                 onClick={handleLoadMore}
                                 className="px-6 py-3 bg-white border border-slate-200 rounded-full text-slate-600 font-semibold hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm"
@@ -158,11 +238,8 @@ const EventList = () => {
                                 더보기
                             </button>
                         )}
-                        {!loading && !hasNext && events.length > 0 && (
-                            <p className="text-slate-400 text-sm">No more events to load.</p>
-                        )}
                         {!loading && events.length === 0 && (
-                            <p className="text-slate-500">No events found.</p>
+                            <p className="text-slate-500">투입 이력이 없습니다.</p>
                         )}
                     </div>
                 </div>

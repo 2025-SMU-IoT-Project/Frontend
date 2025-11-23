@@ -14,10 +14,12 @@ export const getEventDetail = async (uuid) => {
 };
 
 // 2. 전체 이벤트 조회 (Cursor Pagination)
-export const getAllEvents = async (cursorId, limit = 20) => {
+export const getAllEvents = async (cursorId, limit = 20, onlyAbnormal = false, startDate = null, endDate = null) => {
     try {
-        const params = { limit };
+        const params = { limit, onlyAbnormal };
         if (cursorId) params.cursorId = cursorId;
+        if (startDate) params.startDate = startDate;
+        if (endDate) params.endDate = endDate;
 
         const response = await axios.get(`${BASE_URL}`, { params });
         return response.data;
@@ -28,10 +30,12 @@ export const getAllEvents = async (cursorId, limit = 20) => {
 };
 
 // 3. 특정 쓰레기통 이벤트 조회 (Cursor Pagination)
-export const getEventsByBin = async (binId, cursorId, limit = 20) => {
+export const getEventsByBin = async (binId, cursorId, limit = 20, onlyAbnormal = false, startDate = null, endDate = null) => {
     try {
-        const params = { limit };
+        const params = { limit, onlyAbnormal };
         if (cursorId) params.cursorId = cursorId;
+        if (startDate) params.startDate = startDate;
+        if (endDate) params.endDate = endDate;
 
         const response = await axios.get(`${BASE_URL}/bin/${binId}/cursor`, { params });
         return response.data;

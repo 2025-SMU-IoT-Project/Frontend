@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CardHorizontal, CardHorizontalContent } from "../../../../components/ui/cardHorizontal";
 import recycleBinImg from "../../../../../public/dashboardImgs/recycle-bin.png";
 import warningImg from "../../../../../public/dashboardImgs/warning.png";
@@ -29,6 +30,7 @@ const getCurrentMonth = () => {
 };
 
 export const TotalStatistics = () => {
+    const navigate = useNavigate();
     // 기간 선택 상태 (daily, monthly) (기본 daily)
     const [selectedPeriod, setSelectedPeriod] = useState("daily");
     // 오늘/해당 월 선택 상태 (기본 오늘)
@@ -103,6 +105,31 @@ export const TotalStatistics = () => {
             bgColor: "bg-[#FFCDC0]",
             iconSrc: warningImg,
             iconAlt: "unaccepted",
+            onClick: () => {
+                let startDate, endDate;
+                if (selectedPeriod === 'daily') {
+                    startDate = getTodayDate();
+                    endDate = getTodayDate();
+                } else {
+                    const today = new Date();
+                    const year = today.getFullYear();
+                    const month = today.getMonth();
+
+                    const firstDay = new Date(year, month, 1);
+                    const fYear = firstDay.getFullYear();
+                    const fMonth = String(firstDay.getMonth() + 1).padStart(2, '0');
+                    const fDay = String(firstDay.getDate()).padStart(2, '0');
+                    startDate = `${fYear}-${fMonth}-${fDay}`;
+
+                    const lastDay = new Date(year, month + 1, 0);
+                    const lYear = lastDay.getFullYear();
+                    const lMonth = String(lastDay.getMonth() + 1).padStart(2, '0');
+                    const lDay = String(lastDay.getDate()).padStart(2, '0');
+                    endDate = `${lYear}-${lMonth}-${lDay}`;
+                }
+                navigate(`/events?abnormal=true&startDate=${startDate}&endDate=${endDate}`);
+            },
+            isClickable: true
         },
         {
             label: "쓰레기통 채워짐",
@@ -144,8 +171,9 @@ export const TotalStatistics = () => {
                 {statsCards.map((stat, index) => (
                     <CardHorizontal
                         key={index}
-                        className="w-[255px] h-[120px] bg-[#fff4af40] rounded-[25px] border-0 shadow-none translate-y-[-1rem] animate-fade-in opacity-0"
+                        className={`w-[255px] h-[120px] bg-[#fff4af40] rounded-[25px] border-0 shadow-none translate-y-[-1rem] animate-fade-in opacity-0 ${stat.isClickable ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
                         style={{ "--animation-delay": `${index * 200}ms` }}
+                        onClick={stat.onClick}
                     >
                         <CardHorizontalContent className="p-0 h-full flex items-center justify-center">
                             <div className="flex gap-[15px] items-center px-9">
