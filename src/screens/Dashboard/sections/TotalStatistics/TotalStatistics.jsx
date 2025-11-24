@@ -37,6 +37,8 @@ export const TotalStatistics = () => {
     const [selectedDate, setSelectedDate] = useState(getTodayDate());
     // 쓰레기통 정보 모두 저장
     const [totalData, setTotalData] = useState(null);
+    // 각 카드별 hover 상태 관리 (4개의 카드)
+    const [hoveredCardIndex, setHoveredCardIndex] = useState(null);
 
     // 기간이 변경될 때 자동으로 날짜 설정
     useEffect(() => {
@@ -171,9 +173,11 @@ export const TotalStatistics = () => {
                 {statsCards.map((stat, index) => (
                     <CardHorizontal
                         key={index}
-                        className={`w-[255px] h-[120px] bg-[#fff4af40] rounded-[25px] border-0 shadow-none translate-y-[-1rem] animate-fade-in opacity-0 ${stat.isClickable ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
+                        className={`relative w-[255px] h-[120px] bg-[#fff4af40] rounded-[25px] border-0 shadow-none translate-y-[-1rem] animate-fade-in opacity-0 ${stat.isClickable ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
                         style={{ "--animation-delay": `${index * 200}ms` }}
                         onClick={stat.onClick}
+                        onMouseEnter={() => stat.isClickable && setHoveredCardIndex(index)}
+                        onMouseLeave={() => stat.isClickable && setHoveredCardIndex(null)}
                     >
                         <CardHorizontalContent className="p-0 h-full flex items-center justify-center">
                             <div className="flex gap-[15px] items-center px-9">
@@ -197,6 +201,24 @@ export const TotalStatistics = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Hover 오버레이 */}
+                            {stat.isClickable && hoveredCardIndex === index && (
+                                <div className="absolute top-0 left-0 w-full h-full bg-black/60 rounded-[25px] flex flex-col items-center justify-center px-4 transition-all">
+                                    <div className="text-white text-[17px] font-semibold mb-2 [font-family:'Inter',Helvetica]">
+                                        비정상 투입 자세히 보기
+                                    </div>
+                                    {selectedPeriod === "daily" ?
+                                        <div className="font-normal text-white text-[13px] leading-[normal] text-center [font-family:'Inter',Helvetica] tracking-[0]">
+                                            구체적인 오늘의 전체 비정상 투입 내역을 보려면 클릭해 주세요.
+                                        </div>
+                                        :
+                                        <div className="font-normal text-white text-[13px] leading-[normal] text-center [font-family:'Inter',Helvetica] tracking-[0]">
+                                            구체적인 이번 달의 전체 비정상 투입 내역을 보려면 클릭해 주세요.
+                                        </div>
+                                    }
+                                </div>
+                            )}
                         </CardHorizontalContent>
                     </CardHorizontal>
                 ))}
