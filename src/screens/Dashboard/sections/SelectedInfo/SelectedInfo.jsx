@@ -52,7 +52,7 @@ export const SelectedInfo = ({ binData }) => {
                 현재 {binData.binName || "쓰레기통"}의 정보
             </h3>
 
-            <div className="relative w-full h-[600px]">
+            <div className="relative w-full h-[350px]">
                 {statsCards.map((card, index) => {
                     // 각 카드별로 배경색 결정
                     let bgColor = 'bg-[#FFF4B0]/25'; // 기본 배경색

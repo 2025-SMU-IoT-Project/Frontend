@@ -5,6 +5,7 @@ import Header from "../../components/Header";
 import Map from "../../components/Map";
 import { TotalStatistics } from "./sections/TotalStatistics/TotalStatistics";
 import { SelectedInfo } from "./sections/SelectedInfo/SelectedInfo";
+import { DonutChart } from "../../components/donutChart";
 import axios from "axios";
 
 export const Dashboard = () => {
@@ -82,6 +83,7 @@ export const Dashboard = () => {
                     {/* 오른쪽: 현재 선택한 쓰레기통의 정보 */}
                     <section className="w-[400px]">
                         <SelectedInfo binData={binData} />
+                        {binData && <DonutChart binId={binData.binId} />}
                     </section>
                 </div>
             </main>
