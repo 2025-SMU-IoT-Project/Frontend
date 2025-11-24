@@ -7,6 +7,8 @@ import { TotalStatistics } from "./sections/TotalStatistics/TotalStatistics";
 import { SelectedInfo } from "./sections/SelectedInfo/SelectedInfo";
 import { DonutChart } from "../../components/donutChart";
 import axios from "axios";
+import { CupCountGraph } from "./sections/TimeSeriesGraphs/index.js";
+import { LiquidChangingGraph } from "./sections/TimeSeriesGraphs/index.js";
 
 export const Dashboard = () => {
     const location = useLocation();
@@ -86,6 +88,9 @@ export const Dashboard = () => {
                         {binData && <DonutChart binId={binData.binId} />}
                     </section>
                 </div>
+
+                {binData && <CupCountGraph binId={binData.binId} />}
+                {binData && <LiquidChangingGraph binId={binData.binId} />}
             </main>
         </div>
     );
