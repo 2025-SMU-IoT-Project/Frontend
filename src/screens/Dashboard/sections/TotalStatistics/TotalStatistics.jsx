@@ -134,7 +134,7 @@ export const TotalStatistics = () => {
             isClickable: true
         },
         {
-            label: "쓰레기통 채워짐",
+            label: "쓰레기통 채움률",
             value: totalData.averageFillRate,
             bgColor: "bg-[#FFF4B0]",
             iconSrc: recycleBinImg,

@@ -31,14 +31,14 @@ export const SelectedInfo = ({ binData }) => {
             position: "top-0 left-[200px]", // 180px 카드 + 20px 간격
         },
         {
-            title: "쓰레기통 관측, 무게",
+            title: "쓰레기통 채움률, 무게",
             percentage: `${binData.fillRate || 0}%`,
             weight: `${binData.cupWeight || 0}kg`,
             hasGraph: true,
             position: "top-[165px] left-0", // 165px 카드 + 20px 간격
         },
         {
-            title: "액체 과적, 무게",
+            title: "액체 채움률, 무게",
             percentage: `${binData.liquidRate || 0}%`,
             weight: `${binData.liquidWeight || 0}kg`,
             hasGraph: true,
@@ -57,14 +57,14 @@ export const SelectedInfo = ({ binData }) => {
                     // 각 카드별로 배경색 결정
                     let bgColor = 'bg-[#FFF4B0]/25'; // 기본 배경색
 
-                    if (card.title === "쓰레기통 관측, 무게") {
+                    if (card.title === "쓰레기통 채움률, 무게") {
                         // 컵통 기준
                         if (binData.fillRate >= 80 || binData.cupWeight >= 4) {
                             bgColor = 'bg-[#FFCDC0]'; // 빨강 (위험)
                         } else if (binData.fillRate >= 50 || binData.cupWeight >= 2.5) {
                             bgColor = 'bg-[#FFF4B0]'; // 노랑 (경고)
                         }
-                    } else if (card.title === "액체 과적, 무게") {
+                    } else if (card.title === "액체 채움률, 무게") {
                         // 물통 기준
                         if (binData.liquidRate >= 80 || binData.liquidWeight >= 4) {
                             bgColor = 'bg-[#FFCDC0]'; // 빨강 (위험)
