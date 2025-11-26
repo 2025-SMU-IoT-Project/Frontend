@@ -9,6 +9,7 @@ import { DonutChart } from "../../components/donutChart";
 import axios from "axios";
 import { CupCountGraph } from "./sections/TimeSeriesGraphs/index.js";
 import { LiquidChangingGraph } from "./sections/TimeSeriesGraphs/index.js";
+import { LiveSensorGraph } from "./sections/LiveSensorGraph/index.js";
 
 export const Dashboard = () => {
     const location = useLocation();
@@ -89,8 +90,21 @@ export const Dashboard = () => {
                     </section>
                 </div>
 
-                {binData && <CupCountGraph binId={binData.binId} />}
-                {binData && <LiquidChangingGraph binId={binData.binId} />}
+                {/* 선 그래프 영역 */}
+                <div className="mt-[30px]">
+                    {binData && <CupCountGraph binId={binData.binId} />}
+                </div>
+
+                <div className="mt-[20px]">
+                    {binData && <LiquidChangingGraph binId={binData.binId} />}
+                </div>
+
+                <div className="mt-[80px]">
+                    <h2 className="text-[25px] font-semibold text-[#2C3E50]">
+                        실시간 센서 그래프 (선택한 쓰레기통의 센서)
+                    </h2>
+                    {binData && <LiveSensorGraph binId={binData.binId} />}
+                </div>
             </main>
         </div>
     );
