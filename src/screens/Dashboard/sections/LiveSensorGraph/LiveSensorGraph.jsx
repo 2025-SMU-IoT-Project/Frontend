@@ -83,10 +83,11 @@ export const LiveSensorGraph = ({ binId }) => {
                 if (!binId) return;
 
                 try {
-                    const response = await axios.get(`/bin/${binId}/sensor/${apiEndpoint}/history/live`, {
-                        params: { limit: MAX_POINTS },
+                    // 초기 데이터 최근 13개 로드
+                    const response = await axios.get(`http://localhost:8080/api/bin/${binId}/sensor/${apiEndpoint}/history/live`, {
+                        params: { limit: 13 },
                     });
-                    // 최신이 뒤에 오도록 정렬 가정
+                    // 백엔드에서 배열로 반환, 최신이 뒤에 오도록 처리
                     const history = response.data.map((d) => ({
                         label: new Date(d.timestamp).toLocaleTimeString("ko-KR", {
                             hour: "2-digit",
@@ -96,6 +97,7 @@ export const LiveSensorGraph = ({ binId }) => {
                         value: d.value,
                     }));
                     setData(history);
+                    console.log("📊 초기 데이터 로드 완료:", history.length, "개");
                 } catch (e) {
                     console.error("initial sensor history error", e);
                 }
@@ -138,14 +140,22 @@ export const LiveSensorGraph = ({ binId }) => {
                     if (!binId) return;
 
                     try {
-                        const response = await axios.get(`/bin/${binId}/sensor/${apiEndpoint}/history/live`);
-                        const { timestamp, value } = response.data;
+                        // limit=1로 최신 데이터 1개만 요청
+                        const response = await axios.get(`http://localhost:8080/api/bin/${binId}/sensor/${apiEndpoint}/history/live`, {
+                            params: { limit: 1 },
+                        });
+                        // 배열로 반환되므로 첫 번째 요소 사용
+                        const latestData = response.data[0];
+                        if (!latestData) return;
 
+                        const { timestamp, value } = latestData;
                         const label = new Date(timestamp).toLocaleTimeString("ko-KR", {
                             hour: "2-digit",
                             minute: "2-digit",
                             second: "2-digit",
                         });
+
+                        console.log("📈 실시간 데이터 추가:", { label, value });
 
                         setData((prev) => {
                             const next = [...prev, { label, value }];
