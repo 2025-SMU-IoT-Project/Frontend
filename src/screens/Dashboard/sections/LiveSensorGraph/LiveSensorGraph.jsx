@@ -13,7 +13,7 @@ const MAX_POINTS = 40; // 한 화면에 보여줄 포인트 수
 const INTERVAL_MS = 5000; // 5초마다 센서 값 가져오기
 
 // API 만들 때까지 Mock 데이터 사용 (true: Mock 사용, false: 실제 API 사용)
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // Mock 데이터 생성 함수
 const generateMockData = (sensorType, count = MAX_POINTS) => {
@@ -87,8 +87,8 @@ export const LiveSensorGraph = ({ binId }) => {
                     const response = await axios.get(`http://localhost:8080/api/bin/${binId}/sensor/${apiEndpoint}/history/live`, {
                         params: { limit: 13 },
                     });
-                    // 백엔드에서 배열로 반환, 최신이 뒤에 오도록 처리
-                    const history = response.data.map((d) => ({
+                    // API 응답에서 result 배열 추출, 최신이 뒤에 오도록 처리
+                    const history = response.data.result.map((d) => ({
                         label: new Date(d.timestamp).toLocaleTimeString("ko-KR", {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -144,8 +144,8 @@ export const LiveSensorGraph = ({ binId }) => {
                         const response = await axios.get(`http://localhost:8080/api/bin/${binId}/sensor/${apiEndpoint}/history/live`, {
                             params: { limit: 1 },
                         });
-                        // 배열로 반환되므로 첫 번째 요소 사용
-                        const latestData = response.data[0];
+                        // API 응답에서 result 배열 추출하여 첫 번째 요소 사용
+                        const latestData = response.data.result[0];
                         if (!latestData) return;
 
                         const { timestamp, value } = latestData;
