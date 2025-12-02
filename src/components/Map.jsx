@@ -62,11 +62,11 @@ const Map = ({ onMarkerSelect }) => {
                 },
                 {
                     binId: 2,
-                    position: new kakao.maps.LatLng(37.6013857, 126.9555877), // 공학관 1층 로비 (메가커피 앞)
+                    position: new kakao.maps.LatLng(37.6028767, 126.9550561), // 미백관 앞
                 },
                 {
                     binId: 3,
-                    position: new kakao.maps.LatLng(37.6020176, 126.9543041) // 학생회관 2층 카페테리아
+                    position: new kakao.maps.LatLng(37.6021582, 126.9552101) // 학정관
                 }
             ],
                 selectedMarker = null; // 클릭한 마커를 담을 변수
